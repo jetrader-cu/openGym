@@ -1,0 +1,28 @@
+{
+  "name": "TallaYa",
+  "short_name": "TallaYa",
+  "lang": "es-CU",
+  "description": "Tu entrenador de bolsillo, hecho para Cuba. Funciona sin datos.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0D1B2E",
+  "theme_color": "#0D1B2E",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
