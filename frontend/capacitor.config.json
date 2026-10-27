@@ -1,8 +1,8 @@
 {
-  "appId": "ch.duartesantos.opengym",
-  "appName": "openGym",
+  "appId": "cu.tallaya.app",
+  "appName": "TallaYa",
   "webDir": "dist",
-  "backgroundColor": "#0c0e12",
+  "backgroundColor": "#0d1b2e",
   "android": {
     "allowMixedContent": true
   },
@@ -14,7 +14,7 @@
       "launchShowDuration": 8000,
       "launchAutoHide": true,
       "launchFadeOutDuration": 180,
-      "backgroundColor": "#0c0e12",
+      "backgroundColor": "#0d1b2e",
       "showSpinner": false
     }
   }

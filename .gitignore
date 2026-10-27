@@ -48,3 +48,9 @@ assets/tee/
 assets/bmc-cover*
 # scripts/pdf/render-samples.mjs output (npm run pdf:check)
 frontend/pdf-samples/
+
+# TallaYa: production secrets and per-machine build settings (scripts/mobile.sh use-api)
+.env.production
+.env.*.local
+frontend/.env.local
+frontend/release/

@@ -47,41 +47,42 @@
     }
     window.addEventListener('error', function (e) {
       var t = e && e.target;
-      if (t && t.tagName === 'SCRIPT') return fail('openGym could not start on this browser.', 'Could not load ' + (t.src || 'a script'));
+      if (t && t.tagName === 'SCRIPT') return fail('TallaYa could not start on this browser.', 'Could not load ' + (t.src || 'a script'));
       if (!e || !e.message) return;
       last = e.message + (e.filename ? ' at ' + e.filename.split('/').pop() + ':' + e.lineno : '');
-      if (/SyntaxError|Unexpected|Invalid regular expression/i.test(e.message)) fail('openGym could not start on this browser.', last);
+      if (/SyntaxError|Unexpected|Invalid regular expression/i.test(e.message)) fail('TallaYa could not start on this browser.', last);
     }, true);
     window.addEventListener('unhandledrejection', function (e) {
       var r = e && e.reason;
       if (r) last = String((r && r.message) || r);
     });
     setTimeout(function () {
-      fail(last ? 'openGym could not start on this browser.' : 'openGym is taking too long to start.', last);
+      fail(last ? 'TallaYa could not start on this browser.' : 'TallaYa is taking too long to start.', last);
     }, 10000);
   })();
 </script>
-<title>openGym</title>
-<meta name="description" content="Personal gym & body weight tracker">
-<meta name="theme-color" content="#0c0e12">
+<title>TallaYa</title>
+<meta name="description" content="TallaYa: rutinas, registro y progreso. Funciona sin datos. Hecho para Cuba.">
+<meta name="theme-color" content="#0d1b2e">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="openGym">
+<meta name="apple-mobile-web-app-title" content="TallaYa">
 <!-- use-credentials: browsers fetch the manifest without cookies, even same-origin; behind an auth
      proxy (Authelia, Cloudflare Access, Teleport…) that fetch is a login redirect and the Home Screen
      icon comes out generic. iOS 26 reads the icon from the manifest, so this is where it shows. -->
 <link rel="manifest" href="manifest.json" crossorigin="use-credentials">
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" type="image/png" href="icon-180.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
 </head>
 <body>
 <!-- The boot screen: painted with the HTML, before any script runs, so the gap between the
      native splash and the first real screen is the logo loading its plates instead of a black
-     page. Same dark and lime as the native splash. lib/boot.js takes it away the moment the
+     page. Same night blue and mamey as the native splash (brand/). lib/boot.js takes it away the moment the
      app can draw, so it never adds a wait. -->
 <style>
-  #boot{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:#0c0e12;transition:opacity .22s ease-out}
+  #boot{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;background:#0d1b2e;transition:opacity .22s ease-out}
   #boot.out{opacity:0;pointer-events:none}
   #boot svg{width:112px;height:auto;overflow:visible}
   #boot rect,#boot ellipse{transform-box:fill-box;transform-origin:center}
@@ -91,17 +92,17 @@
   #boot .in{animation-delay:.22s}
   #boot .outer{animation-delay:.36s}
   #boot .db{animation:boot-rep 1.25s ease-in-out .75s infinite}
-  #boot ellipse{fill:#a3e635;opacity:.12;animation:boot-shadow 1.25s ease-in-out .75s infinite}
+  #boot ellipse{fill:#2ec4d6;opacity:.12;animation:boot-shadow 1.25s ease-in-out .75s infinite}
   @keyframes boot-bar{from{transform:scaleX(0)}}
   @keyframes boot-plate{from{transform:translateX(-40px);opacity:0}}
   @keyframes boot-plate-r{from{transform:translateX(40px);opacity:0}}
   @keyframes boot-rep{50%{transform:translateY(-26px)}}
   @keyframes boot-shadow{50%{transform:scaleX(.72);opacity:.05}}
   #boot.fail{place-items:center;padding:24px}
-  #boot.fail div{max-width:340px;font:15px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;color:#e6e8ec;text-align:center}
+  #boot.fail div{max-width:340px;font:15px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;color:#fff6ea;text-align:center}
   #boot.fail .h{font-size:19px;font-weight:600;margin:0 0 8px}
-  #boot.fail code{display:block;margin:14px 0 18px;padding:10px;border-radius:10px;background:#1a1d24;color:#a9b0bc;font-size:12px;text-align:left;word-break:break-word;-webkit-user-select:text;user-select:text}
-  #boot.fail button{font:inherit;font-weight:600;color:#0c0e12;background:#a3e635;border:0;border-radius:12px;min-height:44px;padding:0 28px}
+  #boot.fail code{display:block;margin:14px 0 18px;padding:10px;border-radius:10px;background:#132a44;color:#9fb0c6;font-size:12px;text-align:left;word-break:break-word;-webkit-user-select:text;user-select:text}
+  #boot.fail button{font:inherit;font-weight:600;color:#08111f;background:#ff6b3d;border:0;border-radius:12px;min-height:44px;padding:0 28px}
   @media (prefers-reduced-motion:reduce){
     #boot .bar,#boot .pl,#boot .pr,#boot ellipse{animation:none}
     #boot .db{animation:boot-breathe 1.6s ease-in-out infinite}
@@ -111,7 +112,8 @@
 <div id="boot" aria-hidden="true">
   <svg viewBox="80 140 352 250">
     <ellipse cx="256" cy="372" rx="150" ry="9"/>
-    <g class="db" fill="#a3e635">
+    <circle cx="256" cy="256" r="92" fill="#ff6b3d"/>
+    <g class="db" fill="#fff6ea">
       <rect class="bar" x="80" y="242" width="352" height="28"/>
       <rect class="pl in" x="131" y="169" width="47" height="174"/>
       <rect class="pr in" x="334" y="169" width="47" height="174"/>

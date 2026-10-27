@@ -27,14 +27,11 @@ public class AppIconPlugin: CAPPlugin, CAPBridgedPlugin {
 
     /// Icon id → alternate icon name; the original is the primary icon (nil).
     static let icons: [String: String] = [
-        "light": "AppIcon-Light",
+        "malecon": "AppIcon-Malecon",
+        "palma": "AppIcon-Palma",
+        "sol": "AppIcon-Sol",
+        "cal": "AppIcon-Cal",
         "mono": "AppIcon-Mono",
-        "neon": "AppIcon-Neon",
-        "sky": "AppIcon-Sky",
-        "orange": "AppIcon-Orange",
-        "pink": "AppIcon-Pink",
-        "violet": "AppIcon-Violet",
-        "halloween": "AppIcon-Halloween",
     ]
 
     static func id(for iconName: String?) -> String {

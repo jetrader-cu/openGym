@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 512 512">
+  <!-- TallaYa app icon: azul Malecon. Written by brand/scripts/build_app_icon_art.py with only the
+       elements scripts/app-icons.mjs can draw; do not edit by hand. -->
+  <defs>
+    <radialGradient id="bg" gradientUnits="userSpaceOnUse" cx="140" cy="90" r="560">
+      <stop offset="0" stop-color="#11707f"/>
+      <stop offset="1" stop-color="#063540"/>
+    </radialGradient>
+    <radialGradient id="sun" gradientUnits="userSpaceOnUse" cx="256.0" cy="164.8" r="172.0">
+      <stop offset="0" stop-color="#ffc531"/>
+      <stop offset="1" stop-color="#ff6b3d"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <polygon points="256.0,246.0 774.7,282.3 753.3,398.0" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 687.1,536.8 610.6,626.3" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 484.0,713.4 373.0,752.7" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 219.7,764.7 104.0,743.3" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 -34.8,677.1 -124.3,600.6" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 -211.4,474.0 -250.7,363.0" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 -262.7,209.7 -241.3,94.0" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 -175.1,-44.8 -98.6,-134.3" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 28.0,-221.4 139.0,-260.7" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 292.3,-272.7 408.0,-251.3" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 546.8,-185.1 636.3,-108.6" fill="#0f5b68"/>
+  <polygon points="256.0,246.0 723.4,18.0 762.7,129.0" fill="#0f5b68"/>
+  <circle cx="256.0" cy="247.4" r="96.3" fill="url(#sun)"/>
+  <line x1="98.6" y1="177.7" x2="413.4" y2="177.7" stroke="#fff6ea" stroke-width="25.8"/>
+  <line x1="135.6" y1="142.5" x2="135.6" y2="213.0" stroke="#fff6ea" stroke-width="34.4"/>
+  <line x1="376.4" y1="142.5" x2="376.4" y2="213.0" stroke="#fff6ea" stroke-width="34.4"/>
+  <line x1="104.6" y1="152.8" x2="104.6" y2="202.7" stroke="#fff6ea" stroke-width="20.6"/>
+  <line x1="407.4" y1="152.8" x2="407.4" y2="202.7" stroke="#fff6ea" stroke-width="20.6"/>
+  <polygon points="225.0,183.8 287.0,183.8 280.1,383.3 273.2,391.0 238.8,391.0 231.9,383.3" fill="#fff6ea"/>
+  <polyline points="118.4,419.4 124.1,416.5 129.9,414.1 135.6,412.3 141.3,411.0 147.1,410.2 152.8,409.9 158.5,410.2 164.3,411.0 170.0,412.3 175.7,414.1 181.5,416.5 187.2,419.4 192.9,422.3 198.7,424.7 204.4,426.5 210.1,427.8 215.9,428.6 221.6,428.9 227.3,428.6 233.1,427.8 238.8,426.5 244.5,424.7 250.3,422.3 256.0,419.4 261.7,416.5 267.5,414.1 273.2,412.3 278.9,411.0 284.7,410.2 290.4,409.9 296.1,410.2 301.9,411.0 307.6,412.3 313.3,414.1 319.1,416.5 324.8,419.4 330.5,422.3 336.3,424.7 342.0,426.5 347.7,427.8 353.5,428.6 359.2,428.9 364.9,428.6 370.7,427.8 376.4,426.5 382.1,424.7 387.9,422.3 393.6,419.4" stroke="#ffc531" stroke-width="12.0"/>
+</svg>

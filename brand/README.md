@@ -104,16 +104,18 @@ node brand/scripts/render.mjs         # PNG con Chromium (playwright) + ImageMag
 
 Si cambias un color, cámbialo en `tokens.json` **y** en `scripts/build_svg.py`.
 
-## Siguiente paso: llevarlo a la app
+## Ya aplicada en la app
 
-Esta carpeta aún no reemplaza los iconos de openGym dentro de `frontend/`. Para aplicarla:
+`scripts/apply_to_app.mjs` copia y genera dentro de `frontend/`: launcher y capas adaptativas de
+Android (con icono monocromo de Android 13), icono de iOS, splash de las dos plataformas,
+`favicon.ico`/`favicon.svg` e iconos de la PWA. Los iconos alternativos (Original, Malecón, Palma,
+Sol, Cal, Mono) los dibuja `frontend/scripts/app-icons.mjs` desde `frontend/resources/icons/`,
+escritos por `scripts/build_app_icon_art.py`.
 
-1. Copiar `android/res/*` a `frontend/android/app/src/main/res/` (el XML nuevo ya no usa `inset`).
-2. Copiar `ios/AppIcon.appiconset/` a `frontend/ios/App/App/Assets.xcassets/`.
-3. Copiar `web/*` a `frontend/public/` y apuntar `index.html` y `manifest.json` a los nuevos.
-4. Cambiar `appId`/`appName` en `frontend/capacitor.config.json` y el `backgroundColor` a `#0D1B2E`.
-5. Llevar los tokens a las variables CSS del tema y añadir las pantallas de onboarding.
-6. Sustituir `app-icon-variants.js` por los alternativos de TallaYa.
+```bash
+node brand/scripts/apply_to_app.mjs
+python3 brand/scripts/build_app_icon_art.py && (cd frontend && node scripts/app-icons.mjs)
+```
 
 Antes de publicar nada: revisar licencias (AGPL y animaciones de Gym visual) en
 [`docs/marca/nombre-tallaya.md`](../docs/marca/nombre-tallaya.md#riesgos-que-hay-que-resolver-antes-del-lanzamiento).

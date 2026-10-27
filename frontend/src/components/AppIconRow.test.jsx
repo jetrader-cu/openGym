@@ -60,18 +60,18 @@ describe('App icon row', () => {
 
   it('switches on iOS, where the system alert is all the confirmation there is', async () => {
     await mount()
-    await tap('Pink')
-    expect(m.calls).toEqual([{ name: 'pink' }])
-    expect(chosen()).toEqual(['Pink'])
+    await tap('Palm')
+    expect(m.calls).toEqual([{ name: 'palma' }])
+    expect(chosen()).toEqual(['Palm'])
     expect(m.toast).not.toHaveBeenCalled()
   })
 
-  it('offers the Halloween icon last, all year', async () => {
+  it('offers the TallaYa icons with Mono last', async () => {
     await mount()
-    expect(buttons().at(-1).getAttribute('aria-label')).toBe('Halloween')
-    await tap('Halloween')
-    expect(m.calls).toEqual([{ name: 'halloween' }])
-    expect(chosen()).toEqual(['Halloween'])
+    expect(buttons().map(b => b.getAttribute('aria-label'))).toEqual(['Original', 'Malecón', 'Palm', 'Sun', 'Light', 'Mono'])
+    await tap('Sun')
+    expect(m.calls).toEqual([{ name: 'sol' }])
+    expect(chosen()).toEqual(['Sun'])
   })
 
   it('a tap on the icon in use asks the phone nothing', async () => {

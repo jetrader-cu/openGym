@@ -48,22 +48,25 @@ describe('node scripts/app-icons.mjs --check', () => {
   }, 120_000)
 })
 
-describe('the Halloween icon', () => {
-  const v = APP_ICON_VARIANTS.find(x => x.id === 'halloween')
+describe('the TallaYa icon', () => {
+  const v = APP_ICON_VARIANTS.find(x => x.id === 'default')
 
-  it('is a hand-made SVG the renderer knows every piece of', () => {
-    expect(v).toMatchObject({ name: 'Halloween', ios: 'AppIcon-Halloween', art: 'resources/icons/halloween.svg' })
+  it('is the brand art the renderer knows every piece of', () => {
+    expect(v).toMatchObject({ name: 'Original', ios: null, art: 'resources/icons/tallaya.svg' })
     // scene() throws on any element it cannot draw.
     expect(scene(read(v.art)).length).toBeGreaterThan(10)
   })
 
-  it('is dark at the edges, orange on the dumbbell, pale on the moon', () => {
+  it('is night blue at the edges, cal on the T-bar, mamey low on the sun', () => {
     const shapes = scene(read(v.art))
     const at = (x, y) => shapes.find(s => s.hit(x, y)).color(x, y).map(Math.round)
-    expect(at(256, 256)).toEqual([255, 122, 26])   // the bar
-    expect(at(90, 110)).toEqual([247, 232, 180])   // the moon's lit side
+    expect(at(256, 178)).toEqual([255, 246, 234])   // the bar
+    const sun = at(200, 310)
+    expect(sun[0]).toBeGreaterThan(240)
+    expect(sun[2]).toBeLessThan(110)
     const corner = at(10, 500)
-    expect(Math.max(...corner)).toBeLessThan(40)
+    expect(Math.max(...corner)).toBeLessThan(70)
+    expect(corner[2]).toBeGreaterThan(corner[0])   // blue, not black
   })
 })
 
@@ -85,7 +88,7 @@ describe('iOS alternate icons', () => {
     const names = [...pbx.matchAll(/ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "([^"]*)";/g)].map(m => m[1].split(' '))
     expect(names.length).toBe((pbx.match(/ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;/g) || []).length)
     for (const n of names) expect(n).toEqual(ALT.map(v => v.ios))
-    expect(names[0]).toContain('AppIcon-Halloween')
+    expect(names[0]).toContain('AppIcon-Malecon')
   })
 
   it('the plugin is compiled, registered and knows the same sets', () => {
