@@ -101,27 +101,8 @@ describe('App icon row in Look & Home', () => {
   })
 })
 
-describe('Seasonal themes: the Halloween icon shortcut', () => {
-  it('shows on the iPhone while Halloween is on and opens the picker', async () => {
-    await mount('themes')
-    expect(shortcut()).toBeTruthy()
-    await act(async () => { shortcut().click() })
-    expect(mocks.nav).toHaveBeenCalledWith('/settings/look', { state: { find: 'App icon' } })
-  })
-
-  it('stays away when Halloween is off', async () => {
-    mocks.S.seasonal = { halloween: 'off' }
-    await mount('themes')
-    expect(shortcut()).toBeFalsy()
-  })
-
-  it('stays away on Android and on the web', async () => {
-    globalThis.Capacitor = { getPlatform: () => 'android' }
-    await mount('themes')
-    expect(shortcut()).toBeFalsy()
-    act(() => root.unmount()); root = createRoot(host)
-    mocks.MOBILE = false
-    delete globalThis.Capacitor
+describe('Seasonal themes: no Halloween icon shortcut in TallaYa', () => {
+  it('stays away even while Halloween is on (TallaYa has no Halloween icon)', async () => {
     await mount('themes')
     expect(shortcut()).toBeFalsy()
   })

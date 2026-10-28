@@ -42,6 +42,8 @@ import { openDeviceLinkRedeem } from './components/Passkeys.jsx'
 import { useAnimPacksBoot } from './components/Animations.jsx'
 import Login from './views/Login.jsx'
 import MobileOnboarding from './views/MobileOnboarding.jsx'
+import Welcome from './views/Welcome.jsx'
+import { welcomeSeen } from './lib/welcome.js'
 import PermissionSteps from './views/PermissionSteps.jsx'
 import Home from './views/Home.jsx'
 import Plan from './views/Plan.jsx'
@@ -127,6 +129,9 @@ function Shell() {
   const isGuest = useStore(s => s.isGuest())
   const needsMobileOnboarding = useStore(s => s.needsMobileOnboarding)
   const permSteps = useStore(s => s.permSteps)
+  // First launch on this device: the welcome comes before everything (lib/welcome.js). The test
+  // suite renders the app as a returning user; views/Welcome.test.jsx covers the welcome itself.
+  const [welcomed, setWelcomed] = useState(() => import.meta.env.MODE === 'test' || welcomeSeen())
   const langV = useLang()   // re-renders the whole shell when the language (pack) changes
   useEffect(() => { setNav(navigate) }, [navigate])
   const lastEditPath = useRef(loc.pathname)
@@ -280,6 +285,7 @@ function Shell() {
   const authed = user || isGuest
   // The boot screen in index.html covers the start; it goes once there is something to show.
   useEffect(() => { if (ready || authed) hideBoot() }, [ready, authed])
+  if (!welcomed) return <Welcome onDone={() => setWelcomed(true)} />
   if (!ready && !authed) return (
     <div id="app">
       <div style={{ paddingTop: '44vh', display: 'flex', justifyContent: 'center', fontSize: 34, color: 'var(--label-3)' }}>

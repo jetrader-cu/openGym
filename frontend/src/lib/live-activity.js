@@ -143,7 +143,7 @@ export function buildLiveActivity (S, timer = null) {
         nextExercise: t('Next exercise'),
         skipRest: t('Skip rest'),
         // Sets are left, but the activity ran past the ones it carries (many taps, page asleep).
-        openApp: t('Open openGym for the next set'),
+        openApp: t('Open TallaYa for the next set'),
       },
     },
     state: {

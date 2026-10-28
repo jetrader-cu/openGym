@@ -1,0 +1,86 @@
+# TallaYa: stack de produccion gestionado por Dokploy (proyecto `tallaya`).
+#
+# Lo sirve Dokploy como servicio Compose `tallaya-stack` con sourceType `git`: en cada push a
+# `main`, el webhook de GitHub hace que Dokploy clone el repositorio, escriba un `.env` con las
+# variables del panel junto a este fichero, construya las imagenes y levante el stack.
+# Ver docs/DEPLOY_DOKPLOY.md.
+#
+# `build:` y no `image:`: en modo Git el codigo esta en el directorio de trabajo, asi que los
+# contextos relativos resuelven. Con `image:` a secas un despliegue reusaria las imagenes viejas
+# y el codigo nuevo no llegaria a produccion, sin dar error.
+#
+# Ningun servicio publica puertos en el host: el unico ingreso es el Traefik de Dokploy. El api
+# solo vive en la red interna; nginx (web) lo alcanza ahi como `tallaya-api` y le pasa /api, el
+# mismo origen que exigen las passkeys.
+services:
+  api:
+    build:
+      context: ./api
+      target: ${API_TARGET:-default}
+    image: tallaya-api:prod
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=3000
+      - DATA_DIR=/data
+      # Solo web le habla, y web sobrescribe X-Forwarded-For con el cliente real que le da
+      # Traefik: el limite de intentos de acceso puede contar por esa cabecera.
+      - TRUST_PROXY=1
+    volumes:
+      # Usuarios, passkeys, estado de cada usuario, secreto de sesion y subidas. COPIA DE SEGURIDAD.
+      - tallaya_data:/data
+      - tallaya_coach_auth:/coach-auth
+    networks:
+      tallaya-internal:
+        # Alias propio: `api` a secas existe en otros stacks del mismo servidor.
+        aliases:
+          - tallaya-api
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    image: tallaya-web:prod
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+    environment:
+      - NGINX_PORT=80
+      - BACKEND=tallaya-api
+      - PORT=3000
+      - RESOLVER=127.0.0.11
+      - MEDIA_UPLOAD_MAX=${MEDIA_UPLOAD_MAX:-48m}
+    networks:
+      - dokploy-network
+      - tallaya-internal
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: dokploy-network
+      traefik.http.middlewares.tallaya-to-https.redirectscheme.scheme: https
+      traefik.http.middlewares.tallaya-to-https.redirectscheme.permanent: "true"
+      traefik.http.routers.tallaya-web.rule: Host(`${APP_HOST:-tallaya.qvaarbi.com}`)
+      traefik.http.routers.tallaya-web.entrypoints: websecure
+      traefik.http.routers.tallaya-web.tls.certResolver: letsencrypt
+      traefik.http.routers.tallaya-web-http.rule: Host(`${APP_HOST:-tallaya.qvaarbi.com}`)
+      traefik.http.routers.tallaya-web-http.entrypoints: web
+      traefik.http.routers.tallaya-web-http.middlewares: tallaya-to-https
+      traefik.http.services.tallaya-web.loadbalancer.server.port: "80"
+
+networks:
+  dokploy-network:
+    external: true
+  tallaya-internal:
+    driver: bridge
+
+volumes:
+  tallaya_data:
+  tallaya_coach_auth:

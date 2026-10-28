@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<defs><linearGradient id="xpalma-tile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0F5A3A"/><stop offset="1" stop-color="#062B1C"/></linearGradient>
+<linearGradient id="xpalma-sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC531"/><stop offset="1" stop-color="#FF6B3D"/></linearGradient></defs><rect width="512" height="512" fill="url(#xpalma-tile)"/><g transform="translate(35.84 35.84) scale(0.86)"><path d="M256 246 L774.7 282.3 L753.3 398.0 Z M256 246 L687.1 536.8 L610.6 626.3 Z M256 246 L484.0 713.4 L373.0 752.7 Z M256 246 L219.7 764.7 L104.0 743.3 Z M256 246 L-34.8 677.1 L-124.3 600.6 Z M256 246 L-211.4 474.0 L-250.7 363.0 Z M256 246 L-262.7 209.7 L-241.3 94.0 Z M256 246 L-175.1 -44.8 L-98.6 -134.3 Z M256 246 L28.0 -221.4 L139.0 -260.7 Z M256 246 L292.3 -272.7 L408.0 -251.3 Z M256 246 L546.8 -185.1 L636.3 -108.6 Z M256 246 L723.4 18.0 L762.7 129.0 Z" fill="#FFFFFF" opacity="0.06"/><circle cx="256" cy="246" r="112" fill="url(#xpalma-sun)"/><g>
+  <rect x="58" y="150" width="396" height="30" rx="15" fill="#FFF6EA"/>
+  <rect x="96" y="104" width="40" height="122" rx="14" fill="#FFF6EA"/>
+  <rect x="376" y="104" width="40" height="122" rx="14" fill="#FFF6EA"/>
+  <rect x="68" y="124" width="24" height="82" rx="10" fill="#FFF6EA"/>
+  <rect x="420" y="124" width="24" height="82" rx="10" fill="#FFF6EA"/>
+  <path d="M220 172 H292 L284 398 Q284 414 268 414 H244 Q228 414 228 398 Z" fill="#FFF6EA"/>
+</g><path d="M96 446 q40 -22 80 0 t80 0 t80 0 t80 0" fill="none" stroke="#FFC531" stroke-width="14" stroke-linecap="round" opacity="0.95"/></g>
+</svg>

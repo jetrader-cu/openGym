@@ -1,0 +1,91 @@
+{
+  "slug": "tallaya",
+  "name": "TallaYa",
+  "repo": "jetrader-cu/opengym",
+  "url": "PENDIENTE (tallaya.app propuesto)",
+  "tagline": "Ponte en talla, ya.",
+  "audience": "Personas en Cuba que van al gimnasio o entrenan en casa (18-40 años), entrenadores personales y gimnasios particulares (TCP y mipymes)",
+  "tone": [
+    "cercano",
+    "con energía",
+    "cubano de barrio, sin chabacanería",
+    "motivador sin culpa ni promesas mágicas"
+  ],
+  "avoid": [
+    "prometer kilos perdidos o resultados en X días",
+    "cuerpos irreales o retocados",
+    "bandera, estrella solitaria o escudo (símbolos nacionales regulados)",
+    "anglicismos innecesarios (workout, tracking, fitness journey)",
+    "mostrar animaciones de ejercicios de Gym visual sin licencia propia de TallaYa"
+  ],
+  "palette": [
+    { "token": "noche", "hex": "#0D1B2E", "describe": "azul noche habanera", "role": "fondo principal" },
+    { "token": "malecon", "hex": "#16324F", "describe": "azul Malecón", "role": "tarjetas y superficies" },
+    { "token": "mamey", "hex": "#FF6B3D", "describe": "rojo mamey", "role": "acento principal, botones, el sol del logo" },
+    { "token": "sol", "hex": "#FFC531", "describe": "amarillo sol del poniente", "role": "degradados, rachas, récords" },
+    { "token": "palma", "hex": "#22C27A", "describe": "verde palma real", "role": "progreso y éxito" },
+    { "token": "turquesa", "hex": "#2EC4D6", "describe": "turquesa Varadero", "role": "datos, gráficas, olas" },
+    { "token": "cal", "hex": "#FFF6EA", "describe": "blanco cal colonial", "role": "texto sobre oscuro y fondo claro" }
+  ],
+  "fonts": {
+    "display": "Big Shoulders Display",
+    "body": "Manrope",
+    "mono": "JetBrains Mono"
+  },
+  "logos": {
+    "dark": "brand/svg/tallaya-horizontal-dark.svg",
+    "light": "brand/svg/tallaya-horizontal-light.svg",
+    "mark": "brand/svg/tallaya-mark.svg"
+  },
+  "video": {
+    "default_theme": "dark",
+    "motion_style": "cartel deportivo cubano: rayos de sol que giran despacio, titulares condensados que entran de golpe, barra que sube como en un levantamiento, olas turquesa para las transiciones, grano de imprenta",
+    "music_mood": "timba o reguetón instrumental con mucho bajo, 100-120 BPM, cortes al ritmo de las repeticiones",
+    "signature": "el sol mamey sale detrás de la T-barra + «Ponte en talla, ya.»",
+    "stickman": {
+      "theme": "dark",
+      "accents": ["mamey red", "sunset yellow", "Varadero turquoise"]
+    }
+  },
+  "voice": {
+    "style": "voz enérgica de entrenador de barrio, acento cubano claro, frases cortas",
+    "kokoro_fallback": "em_alex",
+    "registry": "ai-swarm/voices.json (perfiles male, female, founder)"
+  },
+  "avatar": {
+    "concept": "«Talla», entrenador ilustrado con pulóver sin mangas mamey, toalla al hombro y silbato, en estilo cartel de los 80",
+    "sheet": "PENDIENTE: generar hoja de personaje"
+  },
+  "channels": {
+    "telegram": "PENDIENTE",
+    "whatsapp_channel": "PENDIENTE",
+    "instagram": "PENDIENTE (@tallaya propuesto)",
+    "facebook": "PENDIENTE",
+    "youtube": "PENDIENTE",
+    "blog": "PENDIENTE"
+  },
+  "pillars": [
+    "rutinas para el gimnasio de barrio y para casa sin equipos",
+    "técnica de ejercicios (con vídeo propio, no las animaciones licenciadas)",
+    "comer bien con lo que hay en Cuba",
+    "historias de progreso reales (con permiso)"
+  ],
+  "feature_topics": [
+    "Planifica tu semana con rutinas listas o propias",
+    "Entrena sin conexión y sin gastar megas",
+    "Récords, peso corporal y mapa muscular",
+    "Subida de carga automática (progresión)",
+    "Planes para entrenadores y gimnasios",
+    "Paga en CUP, MLC o USD con Transfermóvil, EnZona, QvaPay, PayPal, tarjeta, cripto o saldo móvil"
+  ],
+  "legal_note": "Fork de openGym (AGPL-3.0): publicar el código y conservar el crédito. Las animaciones de ejercicios necesitan licencia propia de Gym visual. Sin consejos médicos.",
+  "hashtags": {
+    "base": ["#TallaYa", "#PonteEnTalla", "#Cuba", "#Gimnasio"],
+    "extra": ["#GymCuba", "#EntrenaEnCasa", "#Fitness", "#LaHabana", "#Pesas", "#BajarDePeso"]
+  },
+  "copy_rules": [
+    "La marca se dice «Talla-Ya»; siglas letra a letra (CUP = «ce-u-pe»)",
+    "Titulares en mayúsculas con la última palabra en mamey",
+    "Importes siempre con moneda y, si hay tasa, con fecha"
+  ]
+}

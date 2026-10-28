@@ -3,6 +3,26 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 For people, the same map with diagrams is [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
+## TallaYa (este fork)
+
+Este repositorio es **TallaYa**, la app de fitness para Cuba de la empresa (QvaArbi, FulaYa,
+DivisaYa, CuadraYa), basada en openGym (AGPL-3.0: el código modificado se publica y el crédito a
+openGym se conserva en Ajustes → Acerca de).
+
+- Marca: `brand/` (logo, paleta, tipografías, generadores). Regenerar:
+  `python3 brand/scripts/build_svg.py && node brand/scripts/render.mjs && node brand/scripts/apply_to_app.mjs`.
+  Iconos alternativos: `python3 brand/scripts/build_app_icon_art.py && (cd frontend && node scripts/app-icons.mjs)`.
+- App: id `cu.tallaya.app`, acento por defecto `mamey`, primera pantalla `views/Welcome.jsx`.
+- Móvil: `./scripts/mobile.sh` (doctor, use-api, dev, build, ship).
+- Producción: Dokploy, proyecto `tallaya`, compose `tallaya-stack`, push a `main` = deploy.
+  Detalle y pasos pendientes: [docs/DEPLOY_DOKPLOY.md](docs/DEPLOY_DOKPLOY.md). Variables: `.env.example`.
+- Precios: `founder/pricing-strategy.md`. El cobro aún no está programado (variables reservadas).
+- Idioma de trabajo con el dueño: español de Cuba, frases cortas.
+- Nunca ejecutar `npm run build` para validar: tests (`npx vitest run`, `npm test` en api) y
+  chequeos de idiomas.
+- Las animaciones de Gym visual tienen licencia **solo para openGym**: TallaYa necesita la suya
+  antes de publicarse.
+
 ## What this is
 
 openGym is a self-hosted gym and body-weight tracker. Two containers (`api` + `web`) plus a

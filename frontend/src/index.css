@@ -19,21 +19,22 @@
 /* ---------------------------------------------------------------- tokens -- */
 :root {
   /* surfaces — dark is the default */
-  --bg:        #000000;
-  --bg-el:     #0e0e10;   /* elevated backdrop (sheets, bars) */
-  --surface:   #1c1c1e;   /* card / grouped-list fill */
-  --surface-2: #2c2c2e;   /* pressed + nested fill */
-  --surface-3: #3a3a3c;   /* controls (segmented track, switch off) */
+  /* TallaYa: noche habanera and Malecón blues (brand/tokens.json) */
+  --bg:        #0d1b2e;
+  --bg-el:     #0a1626;   /* elevated backdrop (sheets, bars) */
+  --surface:   #132a44;   /* card / grouped-list fill */
+  --surface-2: #1b3756;   /* pressed + nested fill */
+  --surface-3: #244a70;   /* controls (segmented track, switch off) */
 
-  /* text */
-  --label:     #ffffff;
-  --label-2:   rgba(235,235,245,.60);
-  --label-3:   rgba(235,235,245,.32);
-  --label-4:   rgba(235,235,245,.18);
+  /* text: cal colonial */
+  --label:     #fff6ea;
+  --label-2:   rgba(255,246,234,.62);
+  --label-3:   rgba(255,246,234,.34);
+  --label-4:   rgba(255,246,234,.18);
 
   /* lines */
-  --sep:       rgba(84,84,88,.60);
-  --sep-op:    rgba(84,84,88,.34);   /* for edges sitting over blur */
+  --sep:       rgba(110,150,190,.40);
+  --sep-op:    rgba(110,150,190,.24);   /* for edges sitting over blur */
   --hair:      .5px;
 
   /* system palette (iOS dark values) */
@@ -41,10 +42,11 @@
   --yellow:#ffd60a; --teal:#40c8e0; --indigo:#5e5ce6; --pink:#ff375f;
   --purple:#bf5af2; --mint:#63e6e2; --brown:#ac8e68; --grey:#8e8e93;
 
-  /* accent (per-account, synced) */
-  --acc:  var(--green);
-  --acc-2:#248a3d;
-  --on-acc:#000000;
+  /* accent (per-account, synced): TallaYa's mamey by default */
+  --mamey:#ff6b3d;
+  --acc:  var(--mamey);
+  --acc-2:#c8401c;
+  --on-acc:#08111f;
   --acc-soft: color-mix(in srgb, var(--acc) 16%, transparent);
   --acc-line: color-mix(in srgb, var(--acc) 38%, transparent);
 
@@ -87,11 +89,14 @@
   --blue:#007aff; --green:#34c759; --red:#ff3b30; --orange:#ff9500;
   --yellow:#ffcc00; --teal:#30b0c7; --indigo:#5856d6; --pink:#ff2d55;
   --purple:#af52de; --mint:#00c7be; --brown:#a2845e; --grey:#8e8e93;
-  --acc-2:#248a3d;
+  --mamey:#c8401c;
+  --acc-2:#a8320f;
   --on-acc:#ffffff;
 }
 
 /* accents — Apple's system colours, so a recolour never looks off-system */
+:root[data-accent="mamey"] { --acc:var(--mamey);  --acc-2:#c8401c; --on-acc:#08111f }
+:root[data-theme="light"][data-accent="mamey"] { --on-acc:#fff; --acc-2:#a8320f }
 :root[data-accent="lime"]  { --acc:var(--green);  --acc-2:#248a3d; --on-acc:#000 }
 :root[data-accent="sky"]   { --acc:var(--blue);   --acc-2:#0060df; --on-acc:#fff }
 :root[data-accent="orange"]{ --acc:var(--orange); --acc-2:#c76b00; --on-acc:#000 }
@@ -123,7 +128,7 @@
   :root{
     --blue:#5cb8ff; --green:#4ad968; --red:#ff6165; --orange:#ffa056;
     --yellow:#fedf43; --teal:#3bddec; --indigo:#a7aaff; --pink:#ff8ac4;
-    --purple:#ea8dff; --mint:#54dfcb; --brown:#dba679; --grey:#aeaeb2;
+    --purple:#ea8dff; --mint:#54dfcb; --brown:#dba679; --grey:#aeaeb2; --mamey:#ff7a4f;
     --label-2:rgba(235,235,245,.78); --label-3:rgba(235,235,245,.55); --label-4:rgba(235,235,245,.36);
     --sep:rgba(84,84,88,.95); --sep-op:rgba(84,84,88,.8);
   }
@@ -131,11 +136,19 @@
   :root[data-theme="light"]{
     --blue:#1e6ef4; --green:#008932; --red:#e9152d; --orange:#c55300;
     --yellow:#a16a00; --teal:#008198; --indigo:#564ade; --pink:#e7124d;
-    --purple:#b02fc2; --mint:#008575; --brown:#956d51; --grey:#6c6c70;
+    --purple:#b02fc2; --mint:#008575; --brown:#956d51; --grey:#6c6c70; --mamey:#b0330c;
     --label-2:rgba(60,60,67,.82); --label-3:rgba(60,60,67,.6); --label-4:rgba(60,60,67,.4);
     --sep:rgba(60,60,67,.6); --sep-op:rgba(60,60,67,.5);
   }
 }
+
+/* ---------------------------------------------------------------- fonts -- */
+/* TallaYa's type (brand/README.md): Manrope for text, Big Shoulders Display for the large titles.
+   Bundled, latin subset only, so the app looks the same offline; OFL 1.1 (brand/fonts/README.md). */
+@font-face{font-family:'Manrope';src:url('./fonts/manrope-latin-400-normal.woff2') format('woff2');font-weight:400 500;font-display:swap}
+@font-face{font-family:'Manrope';src:url('./fonts/manrope-latin-600-normal.woff2') format('woff2');font-weight:600 700;font-display:swap}
+@font-face{font-family:'Manrope';src:url('./fonts/manrope-latin-800-normal.woff2') format('woff2');font-weight:800 900;font-display:swap}
+@font-face{font-family:'Big Shoulders Display';src:url('./fonts/big-shoulders-display-latin-900-normal.woff2') format('woff2');font-weight:900;font-display:swap}
 
 /* ---------------------------------------------------------------- reset -- */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -145,7 +158,7 @@ html{
 }
 body{
   background:var(--bg);color:var(--label);
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Segoe UI',Roboto,system-ui,sans-serif;
+  font-family:Manrope,-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Segoe UI',Roboto,system-ui,sans-serif;
   font-size:17px;line-height:1.29;letter-spacing:-.01em;
   min-height:100vh;min-height:100dvh;overscroll-behavior-y:none;overflow-x:clip;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
@@ -278,8 +291,8 @@ button.conn:active{filter:brightness(1.12)}
 .hdr>div{min-width:0}
 .hdr>.btn{flex:none}
 .hdr>.hdr-actions{display:flex;align-items:center;gap:8px;flex:none}
-.hdr h1{font-size:34px;line-height:1.06;font-weight:700;letter-spacing:-.028em;overflow-wrap:break-word}
-@media (max-width:420px){.hdr h1{font-size:30px}}
+.hdr h1{font-family:'Big Shoulders Display',Manrope,system-ui,sans-serif;font-size:40px;line-height:1;font-weight:900;letter-spacing:0;text-transform:uppercase;overflow-wrap:break-word}
+@media (max-width:420px){.hdr h1{font-size:36px}}
 .hdr .sub{color:var(--label-2);font-size:15px;letter-spacing:-.006em;margin-top:4px}
 /* Library: the count line runs under the title row at full width instead of beside the "By muscle"
    button, which left it ~200px on a phone: the catalogue count plus your own exercises stays one
@@ -2341,3 +2354,36 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 .gym-radius-row>:first-child{flex:1}
 .gym-radius-val{min-width:64px;text-align:end;font-variant-numeric:tabular-nums;color:var(--label-2)}
 .gym-actions{display:flex;flex-direction:column;gap:10px;margin:4px 0 30px}
+
+/* ------------------------------------------------------------- welcome -- */
+/* First launch (views/Welcome.jsx): TallaYa's poster look, night sky with the setting sun's
+   glow, condensed headline with the last word in mamey. Dark always, whatever the theme. */
+.welcome{
+  min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;
+  padding:calc(var(--sat) + 18px) 24px calc(var(--sab) + 24px);color:#fff6ea;
+  background:
+    radial-gradient(70% 40% at 50% 28%, rgba(255,107,61,.22), transparent 70%),
+    radial-gradient(120% 60% at 50% 0%, #17325a 0%, transparent 70%),
+    linear-gradient(180deg,#0d1b2e 0%,#08111f 100%);
+}
+.welcome-top{display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.welcome-brand{font:900 30px/1 'Big Shoulders Display',Manrope,sans-serif;letter-spacing:.01em}
+.welcome-brand b{color:#ff6b3d;font-weight:900}
+.welcome-skip{background:none;border:0;color:#9fb0c6;font:600 16px Manrope,sans-serif;padding:10px 4px;cursor:pointer}
+.welcome-art{flex:1;display:grid;place-items:center;min-height:200px;animation:welcome-in .42s var(--ease) both}
+.welcome-art img{width:min(62vw,280px);height:auto;filter:drop-shadow(0 24px 40px rgba(255,107,61,.35))}
+.welcome-icon{display:grid;place-items:center;width:min(48vw,200px);aspect-ratio:1;border-radius:32%;
+  font-size:min(22vw,92px);color:#ff6b3d;background:linear-gradient(180deg,rgba(36,74,112,.6),rgba(22,50,79,.9));
+  border:1px solid rgba(46,196,214,.18);box-shadow:0 30px 60px -24px rgba(0,0,0,.7)}
+.welcome-icon svg{width:1em;height:1em}
+.welcome-copy{animation:welcome-in .42s var(--ease) .05s both}
+.welcome-kicker{font:600 13px ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#ff6b3d}
+.welcome-title{font:900 clamp(44px,13vw,64px)/.9 'Big Shoulders Display',Manrope,sans-serif;text-transform:uppercase;margin:12px 0 0;color:#fff6ea}
+.welcome-body{font:500 17px/1.45 Manrope,sans-serif;color:#9fb0c6;margin-top:14px;max-width:34em}
+.welcome-foot{margin-top:28px}
+.welcome-dots{display:flex;gap:8px;margin-bottom:20px}
+.welcome-dot{width:8px;height:8px;border-radius:4px;border:0;padding:0;background:#244a70;cursor:pointer;transition:width var(--med) var(--ease)}
+.welcome-dot.on{width:32px;background:#ff6b3d}
+.welcome .btn.primary{width:100%;min-height:56px;border-radius:999px;background:#ff6b3d;color:#08111f;font-weight:800;font-size:18px}
+@keyframes welcome-in{from{opacity:0;transform:translateY(14px)}}
+@media (prefers-reduced-motion:reduce){.welcome-art,.welcome-copy{animation:none}}

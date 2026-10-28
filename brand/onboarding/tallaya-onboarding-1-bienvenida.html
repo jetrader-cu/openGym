@@ -1,0 +1,68 @@
+<!doctype html><html lang="es-CU"><head><meta charset="utf-8"><title>TallaYa · onboarding 1</title><style>
+@font-face{font-family:'Big Shoulders Display';src:url('../fonts/big-shoulders-display-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'Big Shoulders Display';src:url('../fonts/big-shoulders-display-latin-800-normal.woff2') format('woff2');font-weight:800;font-display:block}
+@font-face{font-family:'Big Shoulders Display';src:url('../fonts/big-shoulders-display-latin-900-normal.woff2') format('woff2');font-weight:900;font-display:block}
+@font-face{font-family:'Manrope';src:url('../fonts/manrope-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Manrope';src:url('../fonts/manrope-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:block}
+@font-face{font-family:'Manrope';src:url('../fonts/manrope-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:block}
+@font-face{font-family:'Manrope';src:url('../fonts/manrope-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'Manrope';src:url('../fonts/manrope-latin-800-normal.woff2') format('woff2');font-weight:800;font-display:block}
+@font-face{font-family:'JetBrains Mono';src:url('../fonts/jetbrains-mono-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:block}
+:root{--noche:#0D1B2E;--tinta:#08111F;--malecon:#16324F;--borde:#244A70;--mamey:#FF6B3D;
+--sol:#FFC531;--palma:#22C27A;--turquesa:#2EC4D6;--cal:#FFF6EA;--suave:#9FB0C6}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:2340px;overflow:hidden;background:var(--noche)}
+body{font-family:Manrope,sans-serif;color:var(--cal);position:relative}
+.sky{position:absolute;inset:0;background:
+  radial-gradient(70% 34% at 50% 26%, rgba(255,107,61,.22), transparent 70%),
+  radial-gradient(120% 60% at 50% 0%, #17325A 0%, transparent 70%),
+  linear-gradient(180deg, var(--noche) 0%, var(--tinta) 100%)}
+.rays{position:absolute;left:50%;top:640px;width:3000px;height:3000px;margin:-1500px 0 0 -1500px;
+  background:repeating-conic-gradient(from 2deg, rgba(255,255,255,.035) 0 9deg, transparent 9deg 22.5deg);
+  -webkit-mask:radial-gradient(circle, #000 0 30%, transparent 62%)}
+.grain{position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.07;mix-blend-mode:overlay}
+.status{position:absolute;top:0;left:0;right:0;height:84px;display:flex;justify-content:space-between;align-items:center;
+  padding:0 56px;font:700 32px Manrope;color:var(--cal)}
+.status i{display:inline-block;width:52px;height:24px;border:3px solid var(--cal);border-radius:7px;position:relative;opacity:.9}
+.status i:after{content:'';position:absolute;inset:3px;right:12px;background:var(--cal);border-radius:3px}
+.top{position:absolute;top:130px;left:72px;right:72px;display:flex;justify-content:space-between;align-items:center}
+.top img{height:84px}
+.skip{font:700 34px Manrope;color:var(--suave);letter-spacing:.01em}
+.art{position:absolute;top:290px;left:0;right:0;height:1080px;display:flex;align-items:center;justify-content:center}
+.copy{position:absolute;left:72px;right:72px;top:1400px}
+.kicker{font:600 30px 'JetBrains Mono';color:var(--mamey);letter-spacing:.08em;text-transform:uppercase;display:flex;gap:18px;align-items:center}
+.kicker:before{content:'';width:56px;height:6px;background:var(--mamey);border-radius:3px}
+h1{font:900 168px/.86 'Big Shoulders Display';text-transform:uppercase;letter-spacing:-.005em;margin-top:30px}
+h1 em{font-style:normal;color:var(--mamey)}
+p.body{font:500 42px/1.42 Manrope;color:var(--suave);margin-top:40px;max-width:900px}
+p.body b{color:var(--cal);font-weight:700}
+.bottom{position:absolute;left:72px;right:72px;bottom:110px}
+.dots{display:flex;gap:14px;margin-bottom:56px}
+.dot{width:18px;height:18px;border-radius:9px;background:var(--borde)}
+.dot.on{width:72px;background:var(--mamey)}
+.cta{height:150px;border-radius:999px;background:var(--mamey);color:var(--tinta);display:flex;align-items:center;justify-content:center;
+  gap:22px;font:800 48px Manrope;box-shadow:0 26px 60px -18px rgba(255,107,61,.6), inset 0 -6px 0 rgba(0,0,0,.12)}
+.foot{text-align:center;font:600 32px Manrope;color:var(--suave);margin-top:34px}
+.card{background:linear-gradient(180deg, rgba(36,74,112,.55), rgba(22,50,79,.85));border:2px solid rgba(46,196,214,.14);
+  border-radius:44px;box-shadow:0 40px 90px -30px rgba(0,0,0,.7)}
+.chip{display:inline-flex;align-items:center;gap:14px;border-radius:999px;padding:16px 28px;font:700 32px Manrope;
+  background:rgba(255,246,234,.06);border:2px solid var(--borde)}
+.num{font-family:'Big Shoulders Display';font-weight:900;font-variant-numeric:tabular-nums}
+</style></head><body>
+<div class="sky"></div><div class="rays"></div>
+<div class="status"><span>9:41</span><span style="display:flex;gap:16px;align-items:center"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FFF6EA" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20v-3M9 20v-7M14 20v-11M19 20V4" /></svg><i></i></span></div>
+<div class="top"><img src="../svg/tallaya-horizontal-dark.svg" alt="TallaYa"><span class="skip">Saltar</span></div>
+<div class="art"><div style="position:relative;width:860px;height:860px">
+        <svg viewBox="0 0 860 860" width="860" height="860" style="position:absolute;inset:0">
+          <defs><path id="c" d="M430 430 m-380 0 a380 380 0 1 1 760 0 a380 380 0 1 1 -760 0"/></defs>
+          <circle cx="430" cy="430" r="412" fill="none" stroke="#244A70" stroke-width="2" stroke-dasharray="4 14"/>
+          <text font-family="JetBrains Mono" font-weight="600" font-size="30" letter-spacing="9" fill="#9FB0C6">
+            <textPath href="#c">HECHO PARA CUBA · FUNCIONA SIN DATOS · CUP · MLC · USD · HECHO PARA CUBA · FUNCIONA SIN DATOS ·</textPath></text>
+        </svg>
+        <img src="../svg/tallaya-symbol-dark.svg" style="position:absolute;left:110px;top:100px;width:640px;filter:drop-shadow(0 40px 60px rgba(255,107,61,.35))">
+      </div></div>
+<div class="copy" style="top:1400px"><div class="kicker">01 / 05 · Bienvenido</div>
+<h1>Ponte en<br>talla, <em>ya.</em></h1><p class="body">Tu entrenador de bolsillo, <b>hecho para Cuba</b>. Planifica, entrena y mide tu avance desde el teléfono.</p></div>
+<div class="bottom"><div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div class="cta">Empezar <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#08111F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></div></div>
+<div class="grain"></div>
+</body></html>
