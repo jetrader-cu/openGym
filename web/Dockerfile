@@ -109,6 +109,10 @@ ENV MEDIA_UPLOAD_MAX=48m
 # "frame-ancestors 'none'" for the old header.
 ENV CONTENT_SECURITY_POLICY="default-src 'self'; script-src 'self' 'sha256-WYZ4pd9v9PTcqR1kglTsjxJtlOsegjoUKiL6K9xqaYQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob: https:; font-src 'self' data:; connect-src 'self' https: http:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
+# The QvaPay mini-app page (/miniapp) only: framed by the QvaPay app and its simulator, and the
+# simulator's sdk-sim.js allowed. Same policy otherwise; keep the script hash in step with the one above.
+ENV MINIAPP_CONTENT_SECURITY_POLICY="default-src 'self'; script-src 'self' https://www.qvapay.com 'sha256-WYZ4pd9v9PTcqR1kglTsjxJtlOsegjoUKiL6K9xqaYQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob: https:; font-src 'self' data:; connect-src 'self' https: http:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors https://www.qvapay.com https://qvapay.com"
+
 # Probe the port nginx was actually told to listen on (NGINX_PORT is configurable, so a
 # hardcoded http://localhost/ breaks on any instance that changed it), and address it as
 # 127.0.0.1: envsubst rewrites the conf after the image's IPv6 script, so nginx ends up

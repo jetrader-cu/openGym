@@ -10,6 +10,7 @@ import { confirmSheet } from '../sheets.jsx'
 import Icon from '../components/Icon.jsx'
 import { Button } from '../components/ui.jsx'
 import AdminCoach from './AdminCoach.jsx'
+import AdminBilling from './AdminBilling.jsx'
 import '../admin.css'
 
 // Admin-only operator dashboard (owner passkey + admin flag; guarded again server-side).
@@ -388,6 +389,9 @@ export default function Admin() {
     {/* The Coach setup. Renders nothing at all unless the instance offers the Coach, so an admin
         page on a box that never enabled it is byte-for-byte the page it was before. */}
     <div ref={coachRef} className="adm-coach-anchor"><AdminCoach /></div>
+
+    {/* TallaYa: plans, payments, gateways and the QvaPay mini-app (AdminBilling.jsx). */}
+    <AdminBilling users={users || []} />
 
     <InvitesCard invites={invites} reload={loadInvites} inviteOnly={inviteOnly} />
 

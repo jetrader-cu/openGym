@@ -1116,6 +1116,8 @@ function SettingsRoot({ ctx, preview, open, user, sync, home, go, entryKey }) {
           <span className="lrow-m"><span className="lrow-t">{acct.title}</span><span className="lrow-s">{acct.sub}</span></span>
           <Icon name="chevronRight" className="lrow-c" />
         </button>
+        {/* TallaYa: plans and payments (views/Plans.jsx), under the account it belongs to. */}
+        {!DEMO && (user || MOBILE) && <Row icon="crown" iconTint="var(--acc)" title={t('Plans and payments')} accessory="chevron" onClick={() => nav('/plans')} className="sp-root-row" />}
       </Section>
       {ROOT_GROUPS.map(g => g.filter(id => pageVisible(id, ctx))).filter(g => g.length).map(g => (
         <Section key={g[0]}>

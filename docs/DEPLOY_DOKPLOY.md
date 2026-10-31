@@ -36,6 +36,29 @@ Un solo origen, que es lo que exigen las passkeys.
   nada las lee. `BILLING_ENABLED=0` y `QVAPAY_MOCK_MODE=1` hasta que exista.
 - **Cambiar una variable no afecta a lo que ya corre**: hay que redesplegar.
 
+## Cobros, mini-app y coach IA
+
+Todo se maneja desde **Admin → Cobros** (y **Admin → AI Coach** para la IA). Lo guardado allí
+va cifrado en `billing.json` del volumen y manda sobre las variables de entorno.
+
+| Qué | Dónde se configura | URL que hay que pegar fuera |
+|---|---|---|
+| Saldo QvaPay (factura), PayPal y tarjeta (topup con coin `PYPAL` / `CARD`) | Cobros → Pasarelas: App ID + App secret | Callback de la App en QvaPay: `https://tallaya.qvaarbi.com/api/billing/webhook/qvapay` |
+| Cripto USDT/USDC (TronDealer) | Cobros → Pasarelas: API key + secreto del webhook, redes | Webhook en TronDealer: `https://tallaya.qvaarbi.com/api/billing/webhook/trondealer` |
+| Transfermóvil / EnZona en CUP, MLC y USD (Clásica), saldo móvil ETECSA | Cobros → Métodos y cuentas | – (el cliente sube comprobante, tú apruebas) |
+| Tasas del día y margen | Cobros → Tasas (automática del mercado P2P o manual) | – |
+| Planes y precios en USD | Cobros → Planes | – |
+| Mini-app de QvaPay (entrar, registrarse, vincular, pagar con saldo) | Cobros → Pasarelas → Mini-app | Entrada `https://tallaya.qvaarbi.com/miniapp`, origen permitido `https://tallaya.qvaarbi.com`, scope `profile` |
+| Coach IA con OpenRouter | `OPENROUTER_API_KEY` en Dokploy (se enciende solo al arrancar) o Admin → AI Coach | – |
+| Avisos por Telegram | Cobros → Pasarelas → Avisos | – |
+
+Importante:
+- Con `BILLING_ENABLED=0` (o el interruptor de Cobros apagado) todo es gratis y el coach IA es
+  para todos. Al encenderlo, el coach queda para los planes que lo incluyen.
+- TronDealer envía los avisos a **un solo webhook por negocio**. Si la cuenta de TronDealer ya
+  avisa a QvaArbi, crea otro negocio para TallaYa o los pagos cripto de TallaYa no llegarán.
+- Las cuentas de cobro (tarjetas, teléfonos) se ven tal cual por los clientes al pagar.
+
 ## Lo que falta hacer a mano (una sola vez)
 
 Estos pasos necesitan permisos que la sesión de Claude no tiene.
@@ -57,8 +80,9 @@ Estos pasos necesitan permisos que la sesión de Claude no tiene.
 4. **Primer despliegue**: mergear la rama con `docker-compose.dokploy.yml` a `main`. El push
    dispara el webhook. Comprobar en Dokploy → Deployments que termina en `done` y que
    `https://tallaya.qvaarbi.com/api/health` responde.
-5. **Administrador**: registrarse en la web, copiar el uid (Ajustes → Cuenta) y ponerlo en
-   `ADMIN_UIDS`. Redesplegar.
+5. **Administrador**: `FIRST_USER_ADMIN=1` está puesto: el **primer** perfil que se registre
+   es el dueño. Regístrate tú nada más desplegar. Después puedes quitarlo y poner tu uid en
+   `ADMIN_UIDS`.
 
 ## Comprobar el estado (solo lectura)
 

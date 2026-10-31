@@ -16,7 +16,11 @@ openGym se conserva en Ajustes → Acerca de).
 - Móvil: `./scripts/mobile.sh` (doctor, use-api, dev, build, ship).
 - Producción: Dokploy, proyecto `tallaya`, compose `tallaya-stack`, push a `main` = deploy.
   Detalle y pasos pendientes: [docs/DEPLOY_DOKPLOY.md](docs/DEPLOY_DOKPLOY.md). Variables: `.env.example`.
-- Precios: `founder/pricing-strategy.md`. El cobro aún no está programado (variables reservadas).
+- Cobros: `api/billing/` (catálogo puro, tasas P2P sin nombrar la fuente, QvaPay factura/topup,
+  TronDealer, manuales con comprobante, suscripciones con cola) + `views/Plans.jsx` y
+  `views/AdminBilling.jsx`. Solo un webhook firmado o un admin activan un plan. Mini-app de QvaPay:
+  `POST /api/miniapp/login|link`, `lib/miniapp.js`, página `/miniapp` (nginx). Coach IA:
+  OpenRouter (`api/coach/openrouter.js`), gated por plan cuando los cobros están encendidos.
 - Idioma de trabajo con el dueño: español de Cuba, frases cortas.
 - Nunca ejecutar `npm run build` para validar: tests (`npx vitest run`, `npm test` en api) y
   chequeos de idiomas.

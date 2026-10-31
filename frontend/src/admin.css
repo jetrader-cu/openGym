@@ -153,3 +153,14 @@
 
 /* a finished step's summary reads as a receipt, not a control */
 .adm-step.done>summary .adm-step-t span{color:var(--acc)}
+
+/* TallaYa billing card (views/AdminBilling.jsx) */
+.adm-billing .adm-field{display:block;flex:1;min-width:0;margin:0 0 8px}
+.adm-billing .adm-field>span{display:flex;gap:6px;align-items:center;font-size:.78rem;color:var(--label-2);margin:0 0 3px}
+.adm-billing .adm-toggle{padding:6px 0;gap:12px}
+.adm-billing .adm-plan{padding:10px 0 12px;border-bottom:var(--hair) solid var(--sep);margin-bottom:8px}
+.adm-billing .adm-h3{margin:18px 0 4px;font-size:1rem}
+.adm-billing .adm-reqrow{padding:8px 2px;border-bottom:var(--hair) solid var(--sep);cursor:pointer}
+.adm-copy{display:flex;align-items:center;gap:8px;width:100%;text-align:start;margin:4px 0 10px;padding:9px 10px;border:0;border-radius:var(--r);background:var(--surface-2);color:var(--label);font:inherit;cursor:pointer}
+.adm-copy .mono{flex:1;min-width:0;overflow-wrap:anywhere}
+.adm-copy svg{flex:none;color:var(--acc)}

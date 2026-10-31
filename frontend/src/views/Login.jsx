@@ -1,6 +1,7 @@
 import { useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
-import { webauthnOK, passkeyLogin, passkeyRegister, passkeyError, bio } from '../lib/api.js'
+import { api, webauthnOK, passkeyLogin, passkeyRegister, passkeyError, bio } from '../lib/api.js'
+import { inMiniApp, requestLogin } from '../lib/miniapp.js'
 import { hasData } from '../store/useStore.js'
 import { t } from '../lib/i18n.js'
 import { DEMO, REPO } from '../lib/demo.js'
@@ -66,6 +67,31 @@ function RegisterSheet({ close }) {
   </>
 }
 
+// Opened inside the QvaPay app: one tap signs in (or makes the profile) with the QvaPay account.
+// The signed identity goes to the server as it is; nothing here decides who the user is.
+function QvaPaySignIn({ onUser }) {
+  const [cfg, setCfg] = useState(null)
+  const [busy, setBusy] = useState(false)
+  useEffect(() => { api('/api/miniapp/config').then(setCfg).catch(() => setCfg({ enabled: false })) }, [])
+  if (!cfg?.enabled) return null
+  const go = async () => {
+    setBusy(true)
+    try {
+      const init_data = await requestLogin()
+      const r = await api('/api/miniapp/login', { method: 'POST', body: JSON.stringify({ init_data }) })
+      await onUser(r.user, r.created)
+    } catch (e) {
+      if (e?.code !== 'USER_CANCELLED') useUI.getState().toast(e?.data?.code === 'not-linked'
+        ? t('No TallaYa profile is linked to this QvaPay account yet. Sign in below and link it in Settings.')
+        : (e.message || t('Sign-in failed')))
+    } finally { setBusy(false) }
+  }
+  return <>
+    <Button variant="primary" icon="checkCircle" onClick={go} disabled={busy}>{busy ? t('One moment…') : t('Continue with QvaPay')}</Button>
+    <div className="dim small" style={{ margin: '8px 0 18px' }}>{cfg.signup ? t('New here? Your profile is made with your QvaPay name.') : t('Uses the TallaYa profile linked to your QvaPay account.')}</div>
+  </>
+}
+
 export default function Login() {
   const { setUser, adoptProfile, setGuest } = useStore()
   const config = useStore(s => s.config)
@@ -101,6 +127,10 @@ export default function Login() {
     <div className="narrow" style={wrap}>
       {head}
       <div className="muted" style={{ marginBottom: 34 }}>{t('Your workouts. Your weights. Your profile.')}</div>
+      {inMiniApp() && <QvaPaySignIn onUser={async (u, created) => {
+        setUser(u, { adopt: true }); await adoptProfile(askAddDeviceData)
+        useUI.getState().toast(created ? t('Welcome to TallaYa, {0}', u.name) : t('Welcome back, {0}', u.name))
+      }} />}
       {webauthnOK() ? <>
         <Button variant="primary" icon="fingerprint" onClick={signIn}>{t('Sign in with passkey')}</Button>
         <div style={{ height: 10 }} />

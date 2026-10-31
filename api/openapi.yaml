@@ -171,6 +171,15 @@ tags:
     description: >-
       AI Coach: plans, reviews and debriefs. Every route here answers 503 unless the
       instance has the Coach switched on and a provider connected.
+  - name: billing
+    description: >-
+      TallaYa plans and payments. Prices live in USD and are converted to CUP, MLC, Clásica and
+      mobile balance at the day's rate. QvaPay balance, PayPal, card and crypto are confirmed by
+      signed webhooks only; Transfermóvil, EnZona and mobile balance take a receipt an admin approves.
+  - name: miniapp
+    description: >-
+      Signing in from inside the QvaPay app (mini-app): the signed `init_data` creates or opens
+      the TallaYa profile linked to that QvaPay account.
 
 security:
   - cookieAuth: []
@@ -3288,6 +3297,425 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Error' }
               example: { error: "unknown provider" }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/billing/plans:
+    get:
+      tags: [billing]
+      operationId: getBillingPlans
+      summary: The public plans and the methods open now
+      description: |
+        Every public plan with its price per period, in USD and in what each open payment method charges
+        at the day's rate (the rate is never named). `enabled` false means payments are not open yet.
+      security: []
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+  /api/billing/me:
+    get:
+      tags: [billing]
+      operationId: getBillingMe
+      summary: My plan and my payments
+      description: |
+        The plan in force, when it ends, what is queued behind it, the last 30 payment requests and the
+        linked QvaPay account, if any.
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/billing/request:
+    get:
+      tags: [billing]
+      operationId: getBillingRequest
+      summary: One of my payment requests
+      description: |
+        `?id=`. The request with what to pay and where.
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/billing/checkout:
+    post:
+      tags: [billing]
+      operationId: postBillingCheckout
+      summary: Start paying for a plan
+      description: |
+        Creates a payment request with the amount frozen. QvaPay balance returns an invoice URL (or its
+        uuid for `payInvoice` when `miniapp` is true); PayPal and card return the top-up URL; crypto
+        returns a deposit address for `network` + `asset`; manual methods return the account to pay to.
+        The same open order is handed back instead of a second one.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plan: { type: string }
+                cycle: { type: string }
+                method: { type: string }
+                network: { type: string }
+                asset: { type: string }
+                miniapp: { type: boolean }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '400': { description: 'Unknown plan, period or method, or under the method minimum' }
+        '502': { description: 'The payment service did not answer' }
+        '503': { description: 'Payments are off or the rate is unavailable' }
+  /api/billing/proof:
+    post:
+      tags: [billing]
+      operationId: postBillingProof
+      summary: Send the receipt of a manual payment
+      description: |
+        Transfermóvil, EnZona or mobile balance: the transaction number, the paying phone, a note and
+        optionally a photo (data URL, JPG/PNG/WebP under 3 MB). The request goes to review.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: string }
+                ref: { type: string }
+                phone: { type: string }
+                note: { type: string }
+                image: { type: string }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/billing/cancel:
+    post:
+      tags: [billing]
+      operationId: postBillingCancel
+      summary: Cancel a pending payment
+      description: |
+        Only while it waits for payment.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: string }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/billing/webhook/qvapay:
+    post:
+      tags: [billing]
+      operationId: postBillingWebhookQvapay
+      summary: QvaPay payment confirmation (server to server)
+      description: |
+        Signed: `x-qvapay-signature: sha256=<hex>` HMAC of the raw body with the App secret, and
+        `x-qvapay-timestamp` within five minutes. Idempotent by transaction uuid. A partial payment goes
+        to review instead of activating the plan.
+      security: []
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { description: 'Bad or missing signature' }
+  /api/billing/webhook/trondealer:
+    post:
+      tags: [billing]
+      operationId: postBillingWebhookTrondealer
+      summary: TronDealer crypto confirmation (server to server)
+      description: |
+        Signed: `X-Signature-256: sha256=<hex>` HMAC of the raw body with the webhook secret set in the
+        admin dashboard. Only confirmed/swept events activate a plan, never `detected`.
+      security: []
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { description: 'Bad or missing signature, or crypto is off' }
+  /api/miniapp/config:
+    get:
+      tags: [miniapp]
+      operationId: getMiniappConfig
+      summary: Whether the QvaPay mini-app sign-in is open
+      description: |
+        `enabled`, and `signup` when a new QvaPay user gets a profile made for them.
+      security: []
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+  /api/miniapp/login:
+    post:
+      tags: [miniapp]
+      operationId: postMiniappLogin
+      summary: Sign in with the QvaPay mini-app
+      description: |
+        `init_data` exactly as `QvaPay.auth.requestLogin` returned it. Verified with the mini-app's App
+        secret, its app uuid and a ten-minute window; each nonce is good once. Opens the linked profile or
+        creates one, and sets the session cookie.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                init_data: { type: string }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { description: 'The signature, app or age is wrong, or a replay' }
+        '404': { description: 'No profile is linked and sign-up is off' }
+  /api/miniapp/link:
+    post:
+      tags: [miniapp]
+      operationId: postMiniappLink
+      summary: Link my profile to my QvaPay account
+      description: |
+        Signed in already: links the QvaPay account in `init_data` to this profile.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                init_data: { type: string }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '409': { description: 'That QvaPay account belongs to another profile' }
+  /api/miniapp/unlink:
+    post:
+      tags: [miniapp]
+      operationId: postMiniappUnlink
+      summary: Unlink my QvaPay account
+      description: |
+        Refused while QvaPay is the only way into the profile.
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '409': { description: 'It is the last way to sign in' }
+  /api/admin/billing:
+    get:
+      tags: [admin]
+      operationId: getAdminBilling
+      summary: 'Admin: billing settings and state'
+      description: |
+        Settings with every secret masked, plans, rates (market and in force), webhook URLs, the
+        mini-app URL, which methods are ready and the month's numbers.
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/admin/billing/settings:
+    post:
+      tags: [admin]
+      operationId: postAdminBillingSettings
+      summary: 'Admin: change billing settings'
+      description: |
+        A partial patch: switch, methods, accounts, rates and margins, QvaPay, mini-app, TronDealer and
+        Telegram. A secret sent as a string is stored encrypted; `null` or `""` clears it; absent keeps it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled: { type: boolean }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/admin/billing/plans:
+    post:
+      tags: [admin]
+      operationId: postAdminBillingPlans
+      summary: 'Admin: replace the plans'
+      description: |
+        The whole list; one plan must be free (no prices).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plans: { type: array }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '400': { description: 'The list is not valid' }
+  /api/admin/billing/requests:
+    get:
+      tags: [admin]
+      operationId: getAdminBillingRequests
+      summary: 'Admin: payment requests'
+      description: |
+        `?status=` and `?limit=`. Newest first, with the user's name.
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/admin/billing/proof:
+    get:
+      tags: [admin]
+      operationId: getAdminBillingProof
+      summary: 'Admin: the photo of a receipt'
+      description: |
+        `?id=`. As a data URL.
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/admin/billing/decide:
+    post:
+      tags: [admin]
+      operationId: postAdminBillingDecide
+      summary: 'Admin: approve or reject a payment'
+      description: |
+        `action` approve (activates the plan) or reject (with `reason`, which the user sees).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: string }
+                action: { type: string }
+                reason: { type: string }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/admin/billing/subs:
+    get:
+      tags: [admin]
+      operationId: getAdminBillingSubs
+      summary: 'Admin: who has a plan'
+      description: |
+        Every profile with a plan running or queued.
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/admin/billing/grant:
+    post:
+      tags: [admin]
+      operationId: postAdminBillingGrant
+      summary: 'Admin: give or remove a plan'
+      description: |
+        `plan` + `days` adds days by the same rules as a payment; `plan: free` removes the plan.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uid: { type: string }
+                plan: { type: string }
+                days: { type: integer }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/admin/billing/test:
+    post:
+      tags: [admin]
+      operationId: postAdminBillingTest
+      summary: 'Admin: test the QvaPay credentials'
+      description: |
+        `gateway` qvapay or miniapp. Asks QvaPay which App the credentials belong to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gateway: { type: string }
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema: { type: object }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
 
