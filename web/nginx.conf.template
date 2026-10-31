@@ -120,6 +120,21 @@ server {
     # passes that prefix through — "/gym", no trailing slash. A proxy that strips the prefix
     # before the container sees it needs nothing set here: the app asks its own address for the
     # API (lib/api.js appBase), so the call carries whatever prefix the browser is using.
+    # TallaYa: the QvaPay mini-app entry. The same index.html, under a policy of its own: the
+    # QvaPay app and its panel's simulator may frame this one page (and only this one; every
+    # other block still sends frame-ancestors 'none' and DENY), and the simulator's SDK script
+    # may load. Exact match only: with a trailing slash the relative asset paths would break.
+    location = ${BASE_PATH}/miniapp/ {
+        return 302 ${BASE_PATH}/miniapp$is_args$args;
+    }
+    location = ${BASE_PATH}/miniapp {
+        try_files /index.html =404;
+        add_header Cache-Control "no-cache, must-revalidate";
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header Referrer-Policy "same-origin" always;
+        add_header Content-Security-Policy "${MINIAPP_CONTENT_SECURITY_POLICY}" always;
+    }
+
     location ${BASE_PATH}/ {
         # `rewrite ... break` rather than `alias`: try_files inside an aliased prefix location is
         # a long-standing nginx trap (it still resolves the untranslated URI). With BASE_PATH

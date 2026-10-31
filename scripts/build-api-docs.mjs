@@ -140,7 +140,9 @@ const TAGS = {
   // A tag missing from this map renders nowhere at all, silently, so every tag in the
   // spec needs a line here.
   coach: { title: 'AI Coach', side: 'Plans, reviews, debriefs' },
-  admin: { title: 'Admin', side: 'Users, invites, audit log, Coach' }
+  billing: { title: 'Plans &amp; payments', side: 'Checkout, receipts, webhooks' },
+  miniapp: { title: 'QvaPay mini-app', side: 'Sign in from the QvaPay app' },
+  admin: { title: 'Admin', side: 'Users, invites, audit log, Coach, billing' }
 }
 
 // "Admin: list all users" → "List all users": the section heading and the ADMIN

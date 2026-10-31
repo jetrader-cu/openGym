@@ -1686,6 +1686,7 @@ export const PT_BR_OVERRIDES = {
   'Everything you see is free. Paid plans will take CUP, MLC or USD through Transfermóvil, EnZona, QvaPay, PayPal, card, crypto or mobile balance.': 'Tudo o que você vê é grátis. Os planos pagos vão aceitar CUP, MLC ou USD por Transfermóvil, EnZona, QvaPay, PayPal, cartão, cripto ou saldo de celular.',
   'Steps': 'Passos',
   'Start free': 'Começar grátis',
+  'The AI Coach comes with the paid plans. See them in Settings, Plans and payments.': 'O treinador de IA vem com os planos pagos. Veja em Configurações, Planos e pagamentos.',
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

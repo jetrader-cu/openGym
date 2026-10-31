@@ -217,7 +217,9 @@ export const JOB_ERRORS = {
   // The refusal at enqueue when the process cannot drop privileges (api/coach/jobs.js). The same
   // words as api/coach/routes.js USER_ERROR.unprivileged; what to fix goes to the admin card.
   get unprivileged() { return t('The Coach is switched off on this instance for safety reasons.') },
-  get internal() { return t('Something went wrong on the server.') }
+  get internal() { return t('Something went wrong on the server.') },
+  // TallaYa: the Coach comes with the paid plans (api/billing canUseCoach).
+  get plan() { return t('The AI Coach comes with the paid plans. See them in Settings, Plans and payments.') }
 }
 
 // The same failures on a phone that brought its own key: there is no instance owner to

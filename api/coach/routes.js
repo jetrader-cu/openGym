@@ -22,12 +22,14 @@ const USER_ERROR = {
   // Verbatim, because it tells the user the one thing that resolves it and names who resolves
   // it. A vaguer message here turns into a support question for the person running the box.
   shared: cfgStore.SHARED_ACCOUNT_REFUSAL,
-  unprivileged: 'the Coach is switched off on this instance for safety reasons'
+  unprivileged: 'the Coach is switched off on this instance for safety reasons',
+  // TallaYa: the Coach comes with the paid plans (billing/routes.js canUseCoach).
+  plan: 'the AI Coach comes with the paid plans'
 };
 const hostOf = url => { try { return url ? new URL(url).host : null; } catch { return null; } };
-const HTTP_FOR = { off: 503, busy: 409, cap: 429, consent: 403, shared: 409, unprivileged: 503 };
+const HTTP_FOR = { off: 503, busy: 409, cap: 429, consent: 403, shared: 409, unprivileged: 503, plan: 402 };
 
-export function coachRoutes({ json, readBody, readSession, requireAdmin }) {
+export function coachRoutes({ json, readBody, readSession, requireAdmin, canUseCoach = () => true }) {
   /** Every user route starts the same way: signed in, feature on, feature reachable. The class
    *  goes beside the words, as enqueue's refusal sends it: the app shows its own translated line
    *  for the class, and these English words only where it has none. */
@@ -35,6 +37,8 @@ export function coachRoutes({ json, readBody, readSession, requireAdmin }) {
     const user = readSession(req);
     if (!user) { json(res, 401, { error: 'not signed in' }); return null; }
     if (!cfgStore.isEnabled() || !cfgStore.isConnected()) { json(res, 503, { error: USER_ERROR.off, code: 'off' }); return null; }
+    // Reading what the Coach already said stays open; asking it for new work needs a paid plan.
+    if (req.method === 'POST' && !canUseCoach(user)) { json(res, 402, { error: USER_ERROR.plan, code: 'plan' }); return null; }
     return user;
   };
   const failEnqueue = (res, e) => {

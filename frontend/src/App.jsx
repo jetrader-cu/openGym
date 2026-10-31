@@ -44,6 +44,7 @@ import Login from './views/Login.jsx'
 import MobileOnboarding from './views/MobileOnboarding.jsx'
 import Welcome from './views/Welcome.jsx'
 import { welcomeSeen } from './lib/welcome.js'
+import { miniReady, loadSimulator, whenSdk } from './lib/miniapp.js'
 import PermissionSteps from './views/PermissionSteps.jsx'
 import Home from './views/Home.jsx'
 import Plan from './views/Plan.jsx'
@@ -65,6 +66,7 @@ function lazyView(load) {
   }
 }
 const Admin = lazyView(() => import('./views/Admin.jsx'))
+const Plans = lazyView(() => import('./views/Plans.jsx'))
 const CoachChat = lazyView(() => import('./views/CoachChat.jsx'))
 const Measurements = lazyView(() => import('./views/Measurements.jsx'))
 const CoachIntake = lazyView(() => import('./views/CoachIntake.jsx'))
@@ -285,6 +287,8 @@ function Shell() {
   const authed = user || isGuest
   // The boot screen in index.html covers the start; it goes once there is something to show.
   useEffect(() => { if (ready || authed) hideBoot() }, [ready, authed])
+  // Inside the QvaPay app: its own loader stays up until the page says it can paint.
+  useEffect(() => { if (loadSimulator()) whenSdk().then(() => miniReady()); else miniReady() }, [])
   if (!welcomed) return <Welcome onDone={() => setWelcomed(true)} />
   if (!ready && !authed) return (
     <div id="app">
@@ -320,6 +324,7 @@ function Shell() {
       <Route path="/coach/proposal" element={<Navigate to="/coach" replace />} />
       <Route path="/coach/setup" element={<CoachSetup />} />
       <Route path="/admin" element={user?.admin ? <Admin /> : <Navigate to="/home" replace />} />
+      <Route path="/plans" element={<Plans />} />
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   ))

@@ -16,6 +16,8 @@ import webpush from 'web-push';
 import * as coachConfig from './coach/config.js';
 import * as coachJobs from './coach/jobs.js';
 import { coachRoutes } from './coach/routes.js';
+import { billingModule } from './billing/routes.js';
+import { bootstrapOpenRouter } from './coach/openrouter.js';
 import { startCadence } from './coach/cadence.js';
 import { startWarmup } from './coach/warmup.js';
 import { dayReminderPush, nudgePush, restTimerPush, testPush } from './push-messages.js';
@@ -743,7 +745,9 @@ const clearCookie = COOKIE === LEGACY_COOKIE
 // The password routes are deliberately NOT exempt. A name and a password are a credential too,
 // but one a hostile page can know — its own — so an exempt POST /api/login/password would let
 // any site sign a visitor into the attacker's account and collect what they log (login CSRF).
-const CSRF_EXEMPT = new Set(['POST /api/pair/redeem']);
+// The payment webhooks come from QvaPay and TronDealer, server to server, and prove themselves
+// with an HMAC over the raw body instead (billing/routes.js).
+const CSRF_EXEMPT = new Set(['POST /api/pair/redeem', 'POST /api/billing/webhook/qvapay', 'POST /api/billing/webhook/trondealer']);
 // The routes that answer to the credential in the body and never to a Bearer. No Bearer is the
 // credential that acts there, so none buys the shortcut below: any valid token would do, the
 // attacker's own included.
@@ -2107,6 +2111,32 @@ function dataWritable() {
   return ok;
 }
 
+/* ---------- TallaYa billing + QvaPay mini-app (billing/routes.js) ---------- */
+// Handed the helpers it needs, like the Coach. `users` is the narrow view of db.users it may touch.
+const billing = billingModule({
+  json, readBody, readSession, requireAdmin, audit, origin: ORIGIN, dataDir: DATA, secret: SECRET, isAdmin,
+  inviteOnly: INVITE_ONLY,
+  users: {
+    find: uid => db.users.find(u => u.id === uid) || null,
+    byQvapay: uuid => db.users.find(u => u.qvapay && u.qvapay.uuid === uuid) || null,
+    nameTaken: name => nameTaken(name),
+    // A profile made in the mini-app: no passkey and no password yet, QvaPay is its way in.
+    create: ({ name }) => {
+      const user = { id: crypto.randomBytes(12).toString('base64url'), name, created: new Date().toISOString(), via: 'qvapay-miniapp' };
+      db.users.push(user);
+      return user;
+    },
+    hasOtherSignIn: u => hasPassword(u) || passkeyCount(u) > 0,
+    save: () => saveDb(),
+    publicUser: u => publicUser(u),
+    sessionCookie: u => sessionCookie(u),
+  },
+});
+// Pending payments past their window are marked expired once an hour (and on every list).
+setInterval(() => { try { billing.sweep(); } catch (e) { console.warn('billing sweep', e.message); } }, 3600000).unref();
+// OPENROUTER_API_KEY in the environment wires the Coach to OpenRouter once (coach/openrouter.js).
+try { bootstrapOpenRouter(); } catch (e) { console.warn('openrouter bootstrap', e.message); }
+
 const routes = {
   // 503 rather than a flag in a 200: the container healthcheck is `wget --spider`, which reads
   // the status and nothing else, and an instance that cannot write its data directory is exactly
@@ -2913,7 +2943,10 @@ const routes = {
   // Routes live in coach/routes.js and are handed the helpers above rather than importing
   // them: they are closures over db and SECRET, and passing them in keeps that module free of
   // a cycle. Every one of them is inert while the feature is unconfigured.
-  ...coachRoutes({ json, readBody, readSession, requireAdmin }),
+  ...coachRoutes({ json, readBody, readSession, requireAdmin, canUseCoach: billing.canUseCoach }),
+
+  /* ---------- plans, payments and the QvaPay mini-app ---------- */
+  ...billing.routes,
 
   /* ---------- photos & videos ---------- */
   // Absent, not refusing, when MEDIA_UPLOADS=0: a 404 is what a server from before the feature

@@ -53,6 +53,8 @@ const failure = (message, code, status) => Object.assign(new Error(message), { c
 // the address they opened only ever saw "cross-origin request refused", and nobody could tell
 // what to change. The answer names ORIGIN, so the sentence can too (api/verify-error.js).
 function refusal(status, body) {
+  // TallaYa: the AI Coach comes with the paid plans (api/billing canUseCoach).
+  if (body && body.code === 'plan') return t('The AI Coach comes with the paid plans. See them in Settings, Plans and payments.')
   if (body && body.code === 'origin-mismatch') return t('This server only takes changes made at {0}. If you opened TallaYa at another address, whoever runs the server can set ORIGIN and RP_ID to match it (the self-hosting guide shows how).', String(body.expected || '?'))
   return (body && body.error) || ('HTTP ' + status)
 }
